@@ -6,7 +6,7 @@ using InterfaceDemo.Model;
 
 namespace InterfaceDemo.Data
 {
-    public class CustomerRepository
+    public class CustomerRepository : ICustomerRepository
     {
         List<Customer> allCustomers = new List<Customer>
         {
@@ -19,9 +19,10 @@ namespace InterfaceDemo.Data
             return allCustomers;
         }
 
-        public void CreateCustomer(string fname, string lname)
+        public void CreateCustomer(string fullname)
         {
-            allCustomers.Add(new Customer { CustomerId = allCustomers.Count, FirstName = fname, LastName = lname });
+            string[] name = fullname.Split(' ');
+            allCustomers.Add(new Customer { CustomerId = allCustomers.Count, FirstName = name[0], LastName = name[name.Length - 11] });
         }
 
         public Customer ReadCustomer(int cid)
@@ -33,6 +34,7 @@ namespace InterfaceDemo.Data
         public void UpdateCustomer(int cid, string fullname)
         {
             // Mellemnavne bliver droppet.
+            // Middle names are ignored.
             string[] name = fullname.Split(' ');
             ReadCustomer(cid).FirstName = name[0];
             ReadCustomer(cid).LastName = name[name.Length - 1];
@@ -40,6 +42,8 @@ namespace InterfaceDemo.Data
 
         public void UpdateCustomer(ref Customer c, string fullname)
         {
+            // Mellemnavne bliver droppet.
+            // Middle names are ignored.
             string[] name = fullname.Split(' ');
             c.FirstName = name[0];
             c.LastName = name[name.Length - 1];
